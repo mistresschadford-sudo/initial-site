@@ -7,13 +7,14 @@
     <!-- Neocities shared stylesheet -->
     <link href="/style.css" rel="stylesheet" type="text/css" media="all">
     <style>
-.status-subtext::after {
-    content: attr(data-timestamp);
-    display: block;
-    font-size: 13px;
-    color: #8c8c8c;
-    margin-top: 6px;
-}
+        .status-subtext::after {
+            content: attr(data-timestamp);
+            display: block;
+            font-size: 13px;
+            color: #8c8c8c;
+            margin-top: 6px;
+        }
+
         /* Modern CSS Reset & Dark Neon Background Animation */
         body {
             background-color: #0d0614; 
@@ -245,38 +246,6 @@
         }
     </style>
 </head>
-<script>
-  (function () {
-    var statusBox = document.querySelector('.hypno-status-box');
-
-    fetch('/status.txt?_=' + Date.now()) // cache-bust so it doesn't serve a stale cached copy
-      .then(function (response) {
-        if (!response.ok) throw new Error('status.txt not found');
-        return response.text();
-      })
-      .then(function (text) {
-        var lines = text.trim().split('\n');
-        var status = (lines[0] || '').trim().toLowerCase();
-        var timestamp = (lines[1] || '').trim();
-
-        if (status === 'online' || status === 'offline') {
-          statusBox.classList.remove('online', 'offline');
-          statusBox.classList.add(status);
-        }
-
-        if (timestamp) {
-          var subtext = statusBox.querySelector('.status-subtext');
-          if (subtext) {
-            subtext.setAttribute('data-timestamp', 'Last updated: ' + timestamp);
-          }
-        }
-      })
-      .catch(function (err) {
-        console.error('Could not load status:', err);
-        // Falls back to whatever class is already in the HTML
-      });
-  })();
-</script>
 <body>
 
     <!-- Status Box Element -->
@@ -297,7 +266,7 @@
         <p>
             Note: If you are interested in a captivation session and have not had an entrancement session with me before, it is highly suggested that you complete my 5-question pre-session survey prior to your appointment so that I can customize your time with me.
         </p>
-        
+
         <!-- REMINDER: Replace placeholder with your real questionnaire link -->
         <a href="https://presessionmistresschadford.netlify.app/" class="survey-btn">
             ➔ SEND ME THE PRE-SESSION SURVEY
@@ -308,12 +277,45 @@
         <a class="booking-link" href="https://cal.com/mistress-chadford-109dln">
             <img src="MistressChadfordSwingingcrystalpurplepinkbgSM.gif" alt="Swinging Crystal Menu">
         </a>
-<br>
+        <br>
         <a class="booking-button" href="https://cal.com/mistress-chadford-109dln">
             Book a session
         </a>
     </div>
 
+    <script>
+      (function () {
+        var statusBox = document.querySelector('.hypno-status-box');
+        if (!statusBox) return; // page structure not ready/found — bail safely
+
+        fetch('/status.txt?_=' + Date.now()) // cache-bust so it doesn't serve a stale cached copy
+          .then(function (response) {
+            if (!response.ok) throw new Error('status.txt not found');
+            return response.text();
+          })
+          .then(function (text) {
+            var lines = text.trim().split('\n');
+            var status = (lines[0] || '').trim().toLowerCase();
+            var timestamp = (lines[1] || '').trim();
+
+            if (status === 'online' || status === 'offline') {
+              statusBox.classList.remove('online', 'offline');
+              statusBox.classList.add(status);
+            }
+
+            if (timestamp) {
+              var subtext = statusBox.querySelector('.status-subtext');
+              if (subtext) {
+                subtext.setAttribute('data-timestamp', 'Last updated: ' + timestamp);
+              }
+            }
+          })
+          .catch(function (err) {
+            console.error('Could not load status:', err);
+            // Falls back to whatever class is already in the HTML
+          });
+      })();
+    </script>
+
 </body>
 </html>
-
