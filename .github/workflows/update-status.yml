@@ -1,0 +1,41 @@
+name: Update status file
+
+on:
+  workflow_dispatch:
+    inputs:
+      status:
+        description: "Set to online or offline"
+        required: true
+        default: "online"
+
+jobs:
+  update-status:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Write status file
+        run: |
+          STATUS="${{ github.event.inputs.status }}"
+          if [[ "$STATUS" != "online" && "$STATUS" != "offline" ]]; then
+            echo "Status must be online or offline"
+            exit 1
+          fi
+          TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          printf "%s\n%s\n" "$STATUS" "$TIMESTAMP" > status.txt
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add status.txt
+          git diff --quiet && exit 0 || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Set status to ${STATUS}"
+          git push
