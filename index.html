@@ -1,436 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mistress Chadford Scheduling</title>
-  <style>
-    :root {
-      --bg: #0d0614;
-      --card-bg: rgba(18, 4, 26, 0.95);
-      --border: rgba(163, 0, 255, 0.45);
-      --accent: #00ffcc;
-      --pink: #ff66b2;
-      --text: #f3e6ff;
-      --muted: #8c8c8c;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mistress Chadford Scheduling</title>
+    <!-- Neocities shared stylesheet -->
+    <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+    <style>
+        /* Modern CSS Reset & Dark Neon Background Animation */
+        body {
+            background-color: #0d0614; 
+            margin: 0;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            /* Applies an ambient, slowly moving purple/magenta backdrop glow */
+            background-image: radial-gradient(circle at 50% 30%, #30124d 0%, #0d0614 70%);
+            animation: ambientGlow 8s infinite ease-in-out;
+        }
 
-    * {
-      box-sizing: border-box;
-    }
+        /* Responsive Layout Container */
+        .hypno-status-box {
+            background-color: rgba(26, 17, 38, 0.95); /* Slightly translucent to blend with the background glow */
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px; 
+            text-align: center;
+            color: #ffffff;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            margin: 0 auto 30px auto;
+            backdrop-filter: blur(5px); /* Adds a subtle glass effect */
+        }
 
-    body {
-      margin: 0;
-      padding: 20px;
-      min-height: 100vh;
-      font-family: 'Courier New', Courier, monospace;
-      color: var(--text);
-      background-color: var(--bg);
-      background-image: radial-gradient(circle at 50% 30%, #30124d 0%, #0d0614 70%);
-      animation: ambientGlow 8s infinite ease-in-out;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        .status-header {
+            font-size: 20px;
+            letter-spacing: 4px;
+            color: #b399cc;
+            margin-bottom: 24px;
+            border-bottom: 2px dashed #4e2973;
+            padding-bottom: 10px;
+        }
 
-    .page-wrapper {
-      width: 100%;
-      max-width: 920px;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      align-items: center;
-      padding-bottom: 40px;
-    }
+        /* Flexbox structure for status contents */
+        .status-body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap; 
+        }
 
-    .hypno-status-box {
-      width: 100%;
-      max-width: 560px;
-      background-color: rgba(26, 17, 38, 0.95);
-      border-radius: 18px;
-      padding: 30px;
-      text-align: center;
-      border: 4px solid #a300ff;
-      box-shadow: 0 0 30px rgba(163, 0, 255, 0.4);
-      border-radius: 20px;
-      backdrop-filter: blur(5px);
-    }
+        .status-text-wrapper {
+            text-align: center; 
+        }
 
-    .status-header {
-      letter-spacing: 4px;
-      font-size: 20px;
-      color: #b399cc;
-      margin-bottom: 24px;
-      border-bottom: 2px dashed #4e2973;
-      padding-bottom: 10px;
-    }
+        @media (min-width: 400px) {
+            .status-text-wrapper {
+                text-align: left; 
+            }
+        }
 
-    .status-body {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-    }
+        .status-label {
+            font-weight: bold;
+            font-size: 32px;
+            letter-spacing: 2px;
+        }
 
-    .status-text-wrapper {
-      text-align: center;
-    }
+        .status-subtext {
+            margin: 8px 0 0 0;
+            font-size: 18px;
+            line-height: 1.4;
+        }
 
-    .status-label {
-      display: block;
-      font-size: 32px;
-      letter-spacing: 2px;
-      font-weight: bold;
-    }
+        .status-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: none;
+        }
 
-    .status-subtext {
-      margin-top: 8px;
-      font-size: 18px;
-      line-height: 1.4;
-    }
+        /* ONLINE STATUS STYLING */
+        .hypno-status-box.online {
+            border: 4px solid #a300ff;
+            box-shadow: 0 0 30px rgba(163, 0, 255, 0.4);
+        }
 
-    .status-pic {
-      width: 90px;
-      height: 90px;
-      border-radius: 50%;
-      object-fit: cover;
-      display: none;
-    }
+        .hypno-status-box.online .pic-online {
+            display: block;
+            border: 2px solid #00ffcc;
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
 
-    .pic-online {
-      display: block;
-      border: 2px solid #00ffcc;
-      animation: pulseGlow 2.5s infinite ease-in-out;
-    }
+        .hypno-status-box.online .pic-offline {
+            display: none;
+        }
 
-    .hypno-status-box.offline {
-      border-color: #444444;
-      box-shadow: none;
-      opacity: 0.75;
-    }
+        .hypno-status-box.online .status-label::before {
+            content: "ONLINE";
+            color: #00ffcc;
+            text-shadow: 0 0 16px rgba(0, 255, 204, 0.6);
+        }
 
-    .hypno-status-box.offline .pic-online {
-      display: none;
-    }
+        .hypno-status-box.online .status-subtext::before {
+            content: "Awaiting your obedience.";
+            color: #d1b3ff;
+        }
 
-    .hypno-status-box.offline .pic-offline {
-      display: block;
-      border: 2px solid #ff3333;
-    }
+        /* OFFLINE STATUS STYLING */
+        .hypno-status-box.offline {
+            border: 4px solid #444444;
+            box-shadow: none;
+            opacity: 0.7;
+        }
 
-    .booking-container {
-      max-width: 640px;
-      text-align: center;
-      line-height: 1.7;
-      color: #e0d5ed;
-    }
+        .hypno-status-box.offline .pic-offline {
+            display: block;
+            border: 2px solid #ff3333;
+        }
 
-    .booking-link {
-      margin-top: 15px;
-      display: inline-block;
-      color: #b399cc;
-      font-size: 18px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: color 0.2s ease;
-    }
+        .hypno-status-box.offline .pic-online {
+            display: none;
+        }
 
-    .booking-link:hover {
-      color: #00ffcc;
-      text-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
-    }
+        .hypno-status-box.offline .status-label::before {
+            content: "OFFLINE";
+            color: #ff3333;
+            text-shadow: 0 0 16px rgba(255, 51, 51, 0.5);
+        }
 
-    .booking-link img {
-      display: block;
-      margin: 0 auto 10px;
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-    }
+        .hypno-status-box.offline .status-subtext::before {
+            content: "Return later to serve.";
+            color: #8c8c8c;
+        }
 
-    .form-card {
-      width: 100%;
-      max-width: 640px;
-      background-color: var(--card-bg);
-      border-radius: 20px;
-      border: 2px solid var(--border);
-      padding: 26px;
-      box-shadow: 0 0 30px rgba(163, 0, 255, 0.3);
-    }
+        /* Call-To-Action Booking Section */
+        .booking-container {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            color: #e0d5ed;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+        }
 
-    .contact-title {
-      letter-spacing: 4px;
-      font-size: 20px;
-      color: var(--accent);
-      text-align: center;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
+        /* Survey Button Styling */
+        .survey-btn {
+            display: inline-block;
+            margin: 15px auto 25px auto;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #2b1042 0%, #150522 100%);
+            border: 2px solid #a300ff;
+            color: #00ffcc;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 1px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(163, 0, 255, 0.2);
+            transition: all 0.3s ease;
+        }
 
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+        .survey-btn:hover {
+            color: #ffffff;
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+            transform: translateY(-2px);
+        }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+        .booking-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #b399cc;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.2s ease;
+        }
 
-    .form-group label {
-      font-size: 14px;
-      color: var(--pink);
-      letter-spacing: 1px;
-      font-family: 'Courier New', Courier, monospace;
-    }
+        .booking-link:hover {
+            color: #00ffcc;
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
+        }
 
-    .form-input,
-    .form-textarea {
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 10px;
-      padding: 12px;
-      color: var(--text);
-      font-size: 16px;
-      font-family: 'Courier New', Courier, monospace;
-      transition: border-color 0.25s ease, box-shadow 0.25s ease;
-    }
+        .booking-link img {
+            display: block;
+            margin: 0 auto 10px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
 
-    .form-input:focus,
-    .form-textarea:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
-      outline: none;
-    }
+        /* New button below the image */
+        .booking-button {
+            display: inline-block;
+            padding: 10px 32px;
+            margin-top: 12px;
+            border-radius: 30px;
+            border: 2px solid #a300ff;
+            background: linear-gradient(135deg, #2b1042 0%, #150522 100%);
+            color: #00ffcc;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-family: 'Courier New', Courier, monospace;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(163, 0, 255, 0.2);
+            transition: all 0.3s ease;
+        }
 
-    .form-textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
+        .booking-button:hover {
+            color: #ffffff;
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+            transform: translateY(-2px);
+        }
 
-    .form-submit-btn {
-      background: linear-gradient(135deg, #28073d 0%, #0c0120 100%);
-      border: 2px solid var(--accent);
-      color: var(--accent);
-      padding: 14px;
-      border-radius: 12px;
-      letter-spacing: 1px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      box-shadow: 0 0 12px rgba(0, 255, 204, 0.25);
-    }
+        /* Ambient Background Keyframes */
+        @keyframes ambientGlow {
+            0% { background-image: radial-gradient(circle at 50% 30%, #2e114b 0%, #0d0614 70%); }
+            50% { background-image: radial-gradient(circle at 50% 35%, #42146b 0%, #0d0614 65%); }
+            100% { background-image: radial-gradient(circle at 50% 30%, #2e114b 0%, #0d0614 70%); }
+        }
 
-    .form-submit-btn:hover {
-      background: var(--accent);
-      color: #050109;
-      transform: translateY(-2px);
-      box-shadow: 0 0 18px rgba(0, 255, 204, 0.5);
-    }
-
-    .form-submit-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .error-text {
-      font-size: 14px;
-      color: #ff6666;
-      text-align: center;
-      min-height: 18px;
-    }
-
-    .hidden-field {
-      display: none !important;
-    }
-
-    #success-message {
-      display: none;
-      text-align: center;
-      padding: 20px 10px;
-      margin-top: 10px;
-      opacity: 0;
-      transform: scale(0.95);
-      transition: all 0.5s ease;
-    }
-
-    #success-message.reveal {
-      display: block;
-      opacity: 1;
-      transform: scale(1);
-    }
-
-    .success-icon {
-      font-size: 40px;
-      color: var(--accent);
-      margin-bottom: 12px;
-      text-shadow: 0 0 15px rgba(0, 255, 204, 0.6);
-    }
-
-    .success-heading {
-      font-size: 22px;
-      color: #ffffff;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-    }
-
-    .success-text {
-      color: var(--pink);
-      line-height: 1.6;
-    }
-
-    @keyframes ambientGlow {
-      0% { background-image: radial-gradient(circle at 50% 30%, #2e114b 0%, #0d0614 70%); }
-      50% { background-image: radial-gradient(circle at 50% 35%, #42146b 0%, #0d0614 65%); }
-      100% { background-image: radial-gradient(circle at 50% 30%, #2e114b 0%, #0d0614 70%); }
-    }
-
-    @keyframes pulseGlow {
-      0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
-      50% { transform: scale(1.06); box-shadow: 0 0 36px rgba(163, 0, 255, 0.8); }
-      100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
-    }
-
-    @media (max-width: 560px) {
-      body {
-        padding: 16px;
-      }
-
-      .form-card {
-        padding: 22px;
-      }
-    }
-  </style>
+        /* Image Profile Glow Keyframes */
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+            50% { transform: scale(1.06); box-shadow: 0 0 36px rgba(163, 0, 255, 0.8); border-color: #a300ff; }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+        }
+    </style>
 </head>
 <body>
-  <div class="page-wrapper">
+
+    <!-- Status Box Element -->
     <div class="hypno-status-box online">
-      <div class="status-header">MISTRESS STATUS</div>
-      <div class="status-body">
-        <img class="status-pic pic-online" src="MistressChadfordEyes-sq.gif" alt="Hypnotic Spiral">
-        <img class="status-pic pic-offline" src="mchsquare.png" alt="Inactive Eye">
-        <div class="status-text-wrapper">
-          <span class="status-label"></span>
-          <p class="status-subtext"></p>
+        <div class="status-header">MISTRESS STATUS</div>
+        <div class="status-body">
+            <img class="status-pic pic-online" src="MistressChadfordEyes-sq.gif" alt="Hypnotic Spiral">
+            <img class="status-pic pic-offline" src="mchsquare.png" alt="Inactive Eye">
+            <div class="status-text-wrapper">
+                <span class="status-label"></span>
+                <p class="status-subtext"></p>
+            </div>
         </div>
-      </div>
     </div>
 
+    <!-- Booking / Note Block -->
     <div class="booking-container">
-      <p>
-        Note: If you are interested in a captivation session and have not had an entrancement session with me before,
-        it is highly suggested that you complete my 5-question pre-session survey prior to your appointment so that I can
-        customize your time with me.
-      </p>
-      <a class="booking-link" href="https://cal.com/mistress-chadford-109dln">
-        <img src="MistressChadfordSwingingcrystalpurplepinkbgSM.gif" alt="Swinging Crystal Menu">
-        Book a session
-      </a>
-    </div>
-
-    <div class="form-card">
-      <div class="contact-title">Submit a Session Request</div>
-      <form
-        class="contact-form"
-        id="hypno-ajax-form"
-        name="session-request"
-        method="POST"
-        data-netlify="true"
-        netlify-honeypot="bot-field"
-      >
-        <input type="hidden" name="form-name" value="session-request">
-        <p class="hidden-field">
-          <label>Don’t fill this out if you’re human: <input name="bot-field"></label>
+        <p>
+            Note: If you are interested in a captivation session and have not had an entrancement session with me before, it is highly suggested that you complete my 5-question pre-session survey prior to your appointment so that I can customize your time with me.
         </p>
+        
+        <!-- REMINDER: Replace placeholder with your real questionnaire link -->
+        <a href="https://presessionmistresschadford.netlify.app/" class="survey-btn">
+            ➔ TAKE PRE-SESSION SURVEY
+        </a>
 
-        <div class="form-group">
-          <label for="visitor-name">Your Name / Handle</label>
-          <input class="form-input" type="text" id="visitor-name" name="name" required placeholder="Name or Handle" autocomplete="name">
-        </div>
+        <br>
 
-        <div class="form-group">
-          <label for="visitor-email">Your Email Address</label>
-          <input class="form-input" type="email" id="visitor-email" name="email" required placeholder="sub@domain.com" autocomplete="email">
-        </div>
+        <a class="booking-link" href="https://cal.com/mistress-chadford-109dln">
+            <img src="MistressChadfordSwingingcrystalpurplepinkbgSM.gif" alt="Swinging Crystal Menu">
+            Book a session
+        </a>
 
-        <div class="form-group">
-          <label for="visitor-message">Message or Session Request Details</label>
-          <textarea class="form-textarea" id="visitor-message" name="message" required placeholder="Type your details or requests here..." autocomplete="off"></textarea>
-        </div>
-
-        <button class="form-submit-btn" type="submit" id="submit-text-node">Submit Request</button>
-        <div class="error-text" id="form-error-text"></div>
-      </form>
-
-      <div id="success-message">
-        <div class="success-icon">o</div>
-        <div class="success-heading">Message Sent Successfully</div>
-        <div class="success-text">
-          Message received. You have already stepped into My web. Now, let the waiting itself entrance you.
-          Breathe. Feel your focus narrowing with each second. I will pull you deeper when I choose. Wait for My command.
-        </div>
-      </div>
+        <a class="booking-button" href="https://cal.com/mistress-chadford-109dln">
+            Book a session
+        </a>
     </div>
-  </div>
 
-  <script>
-    var formElement = document.getElementById("hypno-ajax-form");
-    var successArea = document.getElementById("success-message");
-    var submitButton = document.getElementById("submit-text-node");
-    var errorText = document.getElementById("form-error-text");
-    var statusBox = document.querySelector(".hypno-status-box");
-
-    var urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("status") === "offline") {
-      statusBox.classList.remove("online");
-      statusBox.classList.add("offline");
-    }
-
-    function encodeFormData(formEl) {
-      var formData = new FormData(formEl);
-      var params = new URLSearchParams();
-      formData.forEach(function(value, key) {
-        params.append(key, value);
-      });
-      return params.toString();
-    }
-
-    if (formElement) {
-      formElement.addEventListener("submit", function(event) {
-        event.preventDefault();
-        submitButton.innerText = "Sending Request...";
-        submitButton.disabled = true;
-        errorText.innerText = "";
-
-        fetch("/", {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: encodeFormData(formElement)
-        })
-        .then(function(response) {
-          if (response.ok) {
-            formElement.style.display = "none";
-            successArea.classList.add("reveal");
-            if (window.parent) {
-              window.parent.postMessage({ hypnoFormStatus: "success" }, "*");
-            }
-          } else {
-            submitButton.innerText = "Submit Request";
-            submitButton.disabled = false;
-            errorText.innerText = "Something went wrong. Please try again.";
-          }
-        })
-        .catch(function() {
-          submitButton.innerText = "Submit Request";
-          submitButton.disabled = false;
-          errorText.innerText = "Network error. Please try again.";
-        });
-      });
-    }
-  </script>
 </body>
 </html>
