@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mistress Chadford Scheduling</title>
+    <!-- Neocities shared stylesheet -->
+    <link href="/style.css" rel="stylesheet" type="text/css" media="all">
+    <style>
+        .status-subtext::after {
+            content: attr(data-timestamp);
+            display: block;
+            font-size: 13px;
+            color: #8c8c8c;
+            margin-top: 6px;
+        }
+
+        /* Modern CSS Reset & Dark Neon Background Animation */
+        body {
+            background-color: #0d0614; 
+            margin: 0;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            /* Applies an ambient, slowly moving purple/magenta backdrop glow */
+            background-image: radial-gradient(circle at 50% 30%, #30124d 0%, #0d0614 70%);
+            animation: ambientGlow 8s infinite ease-in-out;
+        }
+
+        /* Responsive Layout Container */
+        .hypno-status-box {
+            background-color: rgba(26, 17, 38, 0.95); /* Slightly translucent to blend with the background glow */
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px; 
+            text-align: center;
+            color: #ffffff;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            margin: 0 auto 30px auto;
+            backdrop-filter: blur(5px); /* Adds a subtle glass effect */
+        }
+
+        .status-header {
+            font-size: 20px;
+            letter-spacing: 4px;
+            color: #b399cc;
+            margin-bottom: 24px;
+            border-bottom: 2px dashed #4e2973;
+            padding-bottom: 10px;
+        }
+
+        /* Flexbox structure for status contents */
+        .status-body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap; 
+        }
+
+        .status-text-wrapper {
+            text-align: center; 
+        }
+
+        @media (min-width: 400px) {
+            .status-text-wrapper {
+                text-align: left; 
+            }
+        }
+
+        .status-label {
+            font-weight: bold;
+            font-size: 32px;
+            letter-spacing: 2px;
+        }
+
+        .status-subtext {
+            margin: 8px 0 0 0;
+            font-size: 18px;
+            line-height: 1.4;
+        }
+
+        .status-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            object-fit: cover;
+            display: none;
+        }
+
+        /* ONLINE STATUS STYLING */
+        .hypno-status-box.online {
+            border: 4px solid #a300ff;
+            box-shadow: 0 0 30px rgba(163, 0, 255, 0.4);
+        }
+
+        .hypno-status-box.online .pic-online {
+            display: block;
+            border: 2px solid #00ffcc;
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+
+        .hypno-status-box.online .pic-offline {
+            display: none;
+        }
+
+        .hypno-status-box.online .status-label::before {
+            content: "ONLINE";
+            color: #00ffcc;
+            text-shadow: 0 0 16px rgba(0, 255, 204, 0.6);
+        }
+
+        .hypno-status-box.online .status-subtext::before {
+            content: "Awaiting your obedience.";
+            color: #d1b3ff;
+        }
+
+        /* OFFLINE STATUS STYLING */
+        .hypno-status-box.offline {
+            border: 4px solid #444444;
+            box-shadow: none;
+            opacity: 0.7;
+        }
+
+        .hypno-status-box.offline .pic-offline {
+            display: block;
+            border: 2px solid #ff3333;
+        }
+
+        .hypno-status-box.offline .pic-online {
+            display: none;
+        }
+
+        .hypno-status-box.offline .status-label::before {
+            content: "OFFLINE";
+            color: #ff3333;
+            text-shadow: 0 0 16px rgba(255, 51, 51, 0.5);
+        }
+
+        .hypno-status-box.offline .status-subtext::before {
+            content: "Return later to serve.";
+            color: #8c8c8c;
+        }
+
+        /* Call-To-Action Booking Section */
+        .booking-container {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            color: #e0d5ed;
+            text-align: center;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* Survey Button Styling */
+        .survey-btn {
+            display: inline-block;
+            margin: 15px auto 25px auto;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #2b1042 0%, #150522 100%);
+            border: 2px solid #a300ff;
+            color: #00ffcc;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 15px;
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 1px;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(163, 0, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .survey-btn:hover {
+            color: #ffffff;
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .booking-link {
+            display: inline-block;
+            margin-top: 15px;
+            color: #b399cc;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: color 0.2s ease;
+        }
+
+        .booking-link:hover {
+            color: #00ffcc;
+            text-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
+        }
+
+        .booking-link img {
+            display: block;
+            margin: 0 auto 10px auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* New button below the image */
+        .booking-button {
+            display: inline-block;
+            padding: 10px 32px;
+            margin-top: 12px;
+            border-radius: 30px;
+            border: 2px solid #a300ff;
+            background: linear-gradient(135deg, #2b1042 0%, #150522 100%);
+            color: #00ffcc;
+            font-weight: bold;
+            letter-spacing: 1px;
+            font-family: 'Courier New', Courier, monospace;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(163, 0, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .booking-button:hover {
+            color: #ffffff;
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Ambient Background Keyframes */
+        @keyframes ambientGlow {
+            0% { background-image: radial-gradient(circle at 50% 30%, #2e114b 0%, #0d0614 70%); }
+            50% { background-image: radial-gradient(circle at 50% 35%, #42146b 0%, #0d0614 65%); }
+            100% { background-image: radial-gradient(circle at 50% 30%, #2e114b 0%, #0d0614 70%); }
+        }
+
+        /* Image Profile Glow Keyframes */
+        @keyframes pulseGlow {
+            0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+            50% { transform: scale(1.06); box-shadow: 0 0 36px rgba(163, 0, 255, 0.8); border-color: #a300ff; }
+            100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Status Box Element -->
+    <div class="hypno-status-box offline">
+        <div class="status-header">MISTRESS STATUS</div>
+        <div class="status-body">
+            <img class="status-pic pic-online" src="MistressChadfordEyes-sq.gif" alt="Hypnotic Spiral">
+            <img class="status-pic pic-offline" src="mchsquare.png" alt="Inactive Eye">
+            <div class="status-text-wrapper">
+                <span class="status-label"></span>
+                <p class="status-subtext"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking / Note Block -->
+    <div class="booking-container">
+        <p>
+            Note: If you are interested in a captivation session and have not had an entrancement session with me before, it is highly suggested that you complete my 5-question pre-session survey prior to your appointment so that I can customize your time with me.
+        </p>
+
+        <!-- REMINDER: Replace placeholder with your real questionnaire link -->
+        <a href="https://presessionmistresschadford.netlify.app/" class="survey-btn">
+            ➔ SEND ME THE PRE-SESSION SURVEY
+        </a>
+
+        <br>
+
+        <a class="booking-link" href="https://cal.com/mistress-chadford-109dln">
+            <img src="MistressChadfordSwingingcrystalpurplepinkbgSM.gif" alt="Swinging Crystal Menu">
+        </a>
+        <br>
+        <a class="booking-button" href="https://cal.com/mistress-chadford-109dln">
+            Book a session
+        </a>
+    </div>
+
+    <script>
+      (function () {
+        var statusBox = document.querySelector('.hypno-status-box');
+        if (!statusBox) return; // page structure not ready/found — bail safely
+
+        fetch('/status.txt?_=' + Date.now()) // cache-bust so it doesn't serve a stale cached copy
+          .then(function (response) {
+            if (!response.ok) throw new Error('status.txt not found');
+            return response.text();
+          })
+          .then(function (text) {
+            var lines = text.trim().split('\n');
+            var status = (lines[0] || '').trim().toLowerCase();
+            var timestamp = (lines[1] || '').trim();
+
+            if (status === 'online' || status === 'offline') {
+              statusBox.classList.remove('online', 'offline');
+              statusBox.classList.add(status);
+            }
+
+            if (timestamp) {
+              var subtext = statusBox.querySelector('.status-subtext');
+              if (subtext) {
+                subtext.setAttribute('data-timestamp', 'Last updated: ' + timestamp);
+              }
+            }
+          })
+          .catch(function (err) {
+            console.error('Could not load status:', err);
+            // Falls back to whatever class is already in the HTML
+          });
+      })();
+    </script>
+
+</body>
+</html>
