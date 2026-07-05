@@ -8,6 +8,9 @@ on:
         required: true
         default: "online"
 
+permissions:
+  contents: write
+
 jobs:
   update-status:
     runs-on: ubuntu-latest
@@ -26,13 +29,13 @@ jobs:
           fi
           TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           printf "%s\n%s\n" "$STATUS" "$TIMESTAMP" > status.txt
+          echo "STATUS=$STATUS" >> "$GITHUB_ENV"
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add status.txt
-          git diff --quiet && exit 0 || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
             exit 0
