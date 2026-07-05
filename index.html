@@ -238,6 +238,38 @@
         }
     </style>
 </head>
+<script>
+  (function () {
+    var statusBox = document.querySelector('.hypno-status-box');
+
+    fetch('/status.txt?_=' + Date.now()) // cache-bust so it doesn't serve a stale cached copy
+      .then(function (response) {
+        if (!response.ok) throw new Error('status.txt not found');
+        return response.text();
+      })
+      .then(function (text) {
+        var lines = text.trim().split('\n');
+        var status = (lines[0] || '').trim().toLowerCase();
+        var timestamp = (lines[1] || '').trim();
+
+        if (status === 'online' || status === 'offline') {
+          statusBox.classList.remove('online', 'offline');
+          statusBox.classList.add(status);
+        }
+
+        if (timestamp) {
+          var subtext = statusBox.querySelector('.status-subtext');
+          if (subtext) {
+            subtext.setAttribute('data-timestamp', 'Last updated: ' + timestamp);
+          }
+        }
+      })
+      .catch(function (err) {
+        console.error('Could not load status:', err);
+        // Falls back to whatever class is already in the HTML
+      });
+  })();
+</script>
 <body>
 
     <!-- Status Box Element -->
@@ -277,3 +309,4 @@
 
 </body>
 </html>
+
