@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head> <link rel="icon" type="image/png" href="/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mistress Chadford Scheduling</title>
@@ -242,6 +242,20 @@
             50% { transform: scale(1.06); box-shadow: 0 0 36px rgba(163, 0, 255, 0.8); border-color: #a300ff; }
             100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
         }
+
+        /* Embedded Email form iframe wrapper */
+        .email-form-wrapper {
+            width: 100%;
+            max-width: 520px;
+            margin: 10px auto 0 auto;
+        }
+
+        .email-form-wrapper iframe {
+            width: 100%;
+            height: 620px;
+            border: none;
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -281,6 +295,16 @@
         </a>
     </div>
 
+    <!-- Embedded Email Me Form -->
+    <div class="email-form-wrapper">
+        <iframe
+            id="email-me-form-iframe"
+            src="https://mistresschadfordemail.netlify.app/"
+            title="Email Me Form"
+            loading="lazy">
+        </iframe>
+    </div>
+
     <script>
       (function () {
         var statusBox = document.querySelector('.hypno-status-box');
@@ -306,6 +330,12 @@
               if (subtext) {
                 subtext.setAttribute('data-timestamp', 'Last updated: ' + timestamp);
               }
+            }
+
+            // Sync the embedded email form's online/offline appearance too
+            var formIframe = document.getElementById('email-me-form-iframe');
+            if (formIframe && status === 'offline') {
+              formIframe.src = formIframe.src + '?status=offline';
             }
           })
           .catch(function (err) {
