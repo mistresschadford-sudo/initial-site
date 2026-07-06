@@ -288,7 +288,7 @@
         var statusBox = document.querySelector('.hypno-status-box');
         if (!statusBox) return; // page structure not ready/found — bail safely
 
-        fetch('/status.txt?_=' + Date.now()) // cache-bust so it doesn't serve a stale cached copy
+       fetch('https://raw.githubusercontent.com/mistresschadford-sudo/initial-site/main/status.txt?_=' + Date.now())
           .then(function (response) {
             if (!response.ok) throw new Error('status.txt not found');
             return response.text();
