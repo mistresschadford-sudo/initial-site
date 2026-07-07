@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mistress Chadford Scheduling</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         .status-subtext::after {
             content: attr(data-timestamp);
@@ -18,7 +21,7 @@
             background-color: #0d0614; 
             margin: 0;
             padding: 20px;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Inter', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -149,7 +152,7 @@
 
         /* Call-To-Action Booking Section */
         .booking-container {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Inter', sans-serif;
             font-size: 16px;
             color: #e0d5ed;
             text-align: center;
@@ -168,7 +171,7 @@
             text-decoration: none;
             font-weight: bold;
             font-size: 15px;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Inter', sans-serif;
             letter-spacing: 1px;
             border-radius: 30px;
             box-shadow: 0 4px 15px rgba(163, 0, 255, 0.2);
@@ -216,7 +219,7 @@
             color: #00ffcc;
             font-weight: bold;
             letter-spacing: 1px;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: 'Inter', sans-serif;
             text-decoration: none;
             box-shadow: 0 4px 15px rgba(163, 0, 255, 0.2);
             transition: all 0.3s ease;
@@ -241,6 +244,44 @@
             0% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
             50% { transform: scale(1.06); box-shadow: 0 0 36px rgba(163, 0, 255, 0.8); border-color: #a300ff; }
             100% { transform: scale(1); box-shadow: 0 0 20px rgba(0, 255, 204, 0.4); }
+        }
+
+        /* Newsletter Button Styling */
+        .newsletter-btn {
+            display: block;
+            max-width: 500px;
+            margin: 10px auto 25px auto;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #2b1042 0%, #150522 100%);
+            border: 2px solid #a300ff;
+            border-radius: 20px;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(163, 0, 255, 0.2);
+            transition: all 0.3s ease;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .newsletter-btn:hover {
+            border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .newsletter-btn-title {
+            display: block;
+            color: #00ffcc;
+            font-weight: bold;
+            font-size: 16px;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .newsletter-btn-subtext {
+            display: block;
+            color: #e0d5ed;
+            font-size: 14px;
+            line-height: 1.5;
         }
 
         /* Embedded Email form iframe wrapper */
@@ -294,6 +335,12 @@
             Book a session
         </a>
     </div>
+
+    <!-- Newsletter Signup Button -->
+    <a href="https://beacons.ai/mistresschadford" target="_blank" rel="noopener" class="newsletter-btn">
+        <span class="newsletter-btn-title">Get my newsletter — you feel the pull.<br>You are already curious</span>
+        <span class="newsletter-btn-subtext">Exclusive whispers of My control, enchantment, entrancement. Never more than twice a month.</span>
+    </a>
 
     <!-- Embedded Email Me Form -->
     <div class="email-form-wrapper">
